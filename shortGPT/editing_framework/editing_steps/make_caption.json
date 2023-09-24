@@ -10,9 +10,9 @@
 			"text": null,
 			"fontsize": 100,
 			"font": "Calibri-Bold",
-			"color": "white",
+			"color": "transparent",
 			"stroke_width": 3,
-			"stroke_color": "black",
+			"stroke_color": "transparent",
 			"method": "caption",
 			"size": [
 				900,
