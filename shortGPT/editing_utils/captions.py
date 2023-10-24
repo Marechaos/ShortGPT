@@ -47,25 +47,25 @@ def splitWordsBySize(words, maxCaptionSize):
         captions.append(caption)
     return captions
 
-def getCaptionsWithTime(whisper_analysis, maxCaptionSize=15, considerPunctuation=False):
+def getCaptionsWithTime(whisper_analysis, considerPunctuation=True):
     wordLocationToTime = getTimestampMapping(whisper_analysis)
-    position = 0
-    start_time = 0
     CaptionsPairs = []
     text = whisper_analysis['text']
     
     if considerPunctuation:
         sentences = re.split(r'(?<=[.!?]) +', text)
-        words = [word for sentence in sentences for word in splitWordsBySize(sentence.split(), maxCaptionSize)]
+        words = [word for sentence in sentences for word in sentence.split()]
     else:
         words = text.split()
-        words = [cleanWord(word) for word in splitWordsBySize(words, maxCaptionSize)]
+        words = [cleanWord(word) for word in words]
     
+    start_time = None  # Inicialize o tempo de início como None
     for word in words:
-        position += len(word) + 1
-        end_time = interpolateTimeFromDict(position, wordLocationToTime)
+        end_time = interpolateTimeFromDict(len(word), wordLocationToTime)
         if end_time and word:
-            CaptionsPairs.append(((start_time, end_time), word))
+            # Crie uma legenda para cada palavra
+            if start_time is not None:
+                CaptionsPairs.append(((start_time, end_time), word))
             start_time = end_time
 
     return CaptionsPairs
